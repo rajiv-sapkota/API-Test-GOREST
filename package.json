@@ -1,0 +1,27 @@
+{
+  "name": "api-test-gorest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajiv-sapkota/API-Test-GOREST.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajiv-sapkota/API-Test-GOREST/issues"
+  },
+  "homepage": "https://github.com/rajiv-sapkota/API-Test-GOREST#readme",
+  "description": "",
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^24.0.14",
+    "cypress": "^14.5.2",
+    "dotenv": "^17.2.0",
+    "typescript": "^5.8.3"
+  }
+}
