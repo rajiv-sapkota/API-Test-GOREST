@@ -10,6 +10,7 @@ export function generateFakeuser() {
     zipCode: faker.location.zipCode(),
     email: faker.internet.email(),
     gender: faker.helpers.arrayElement(["male", "female"]),
-    title:faker.string.alpha({length:256})
+    title: faker.string.alpha({ length: 256 }),
+    date : faker.date.future().toISOString().split("T")[0]
   };
 }

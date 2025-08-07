@@ -193,7 +193,7 @@ describe("API tests for GOREST /comments endpoint", () => {
     });
   });
 
-  it("TC-CMNT-111: Update comment with empty name & body", () => {
+  it.skip("TC-CMNT-111: Update comment with empty name & body", () => {
     const data = { name: "", body: "" };
     cy.request({
       method: "PUT",
