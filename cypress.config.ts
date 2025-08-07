@@ -5,17 +5,20 @@ const {
   afterRunHook,
 } = require("cypress-mochawesome-reporter/lib");
 
-
 dotenv.config();
 
 export default defineConfig({
   reporter: "cypress-mochawesome-reporter",
   reporterOptions: {
+    reportDir: "cypress/reports",
     charts: true,
-    reportPageTitle: "API Test Report",
+    reportPageTitle: "Report for SauceDemo",
     embeddedScreenshots: true,
     inlineAssets: true,
     saveAllAttempts: false,
+    html: true,
+    json: false,
+    overwrite: false,
   },
   e2e: {
     env: {
@@ -25,6 +28,7 @@ export default defineConfig({
     supportFile: "cypress/support/e2e.ts",
     specPattern: "cypress/e2e/**/*.cy.ts",
     setupNodeEvents(on, config) {
+      return config;
       on("before:run", async (details) => {
         console.log("override before:run");
         await beforeRunHook(details);
