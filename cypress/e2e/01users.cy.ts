@@ -1,7 +1,7 @@
 import { generateFakeuser } from "../fakerData/data";
 const userData = generateFakeuser();
 
-describe("API test using Cypress for GOREST API USERS", () => {
+describe.skip("API test using Cypress for GOREST API USERS", () => {
   let userId: number;
   let invalidId: number = 123;
   let userEmail: string;

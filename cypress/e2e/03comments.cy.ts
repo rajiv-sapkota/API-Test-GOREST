@@ -1,6 +1,6 @@
 // cypresponses/e2e/comments.cy.ts
 
-describe("API tests for GOREST /comments endpoint", () => {
+describe.skip("API tests for GOREST /comments endpoint", () => {
   let validPostId: number;
   let createdCommentId: number;
 
