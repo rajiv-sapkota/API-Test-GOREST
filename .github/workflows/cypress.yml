@@ -8,10 +8,10 @@ on:
   schedule:
     - cron: "15 6 * * *" # Runs daily at 12:00 PM Nepali time
   workflow_dispatch:
-    
+
 permissions:
-         pull-requests: write
-         contents: write
+  pull-requests: write
+  contents: write
 
 jobs:
   cypress-run:
@@ -19,7 +19,6 @@ jobs:
 
     env:
       TOKEN: ${{ secrets.TOKEN }}
-      
 
     steps:
       - name: 📥 Checkout code
@@ -57,5 +56,3 @@ jobs:
           to: rajiv.sapkota96@gmail.com
           from: ${{ secrets.EMAIL_USERNAME }}
           attachments: ./cypress/reports/index.html
-
-     
