@@ -1,0 +1,83 @@
+name: Cypress Tests with Mochawesome Reporter
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  schedule:
+    - cron: "15 6 * * *" # Runs daily at 12:00 PM Nepali time
+  workflow_dispatch:
+    
+permissions:
+         pull-requests: write
+         contents: write
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+      USER_NAME: ${{ secrets.USER_NAME }}
+      PASSWORD: ${{ secrets.PASSWORD }}
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      - name: 🧪 Run Cypress tests with Mochawesome Reporter
+        run: |
+          npx cypress run
+
+      - name: 📤 Upload full Mochawesome Report Folder
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Saucedemo Test Report
+          path: ./cypress/reports
+
+      - name: 📧 Send Report via Email
+        if: always()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Report for SauceDemo Test via Actions - ${{ github.run_id }}"
+          body: "Please find the attached report from the latest workflow run."
+          to: rajiv.sapkota96@gmail.com
+          from: ${{ secrets.EMAIL_USERNAME }}
+          attachments: ./cypress/reports/index.html
+
+      - name: 💬 Comment & ❌ Auto-close PR if tests failed
+        if: failure() && github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} \
+            --body "❌ Cypress tests failed. This PR is being closed automatically."
+          gh pr close ${{ github.event.pull_request.number }}
+        continue-on-error: true
+
+      - name: ✅ Auto-merge PR if tests passed
+        if: success() && github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          echo "Merging PR #${{ github.event.pull_request.number }}..."
+          curl -X PUT \
+            -H "Authorization: token $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/merge \
+            -d '{"merge_method": "merge"}'
+          echo "PR #${{ github.event.pull_request.number }} merged successfully."
