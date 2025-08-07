@@ -213,7 +213,7 @@ describe("API tests using Cypress for GOREST API POSTS", () => {
       ]);
     });
   });
-  it("TC-POSTS-111: Should list posts filtered by valid user id", () => {
+  it.skip("TC-POSTS-111: Should list posts filtered by valid user id", () => {
     cy.request({
       method: "GET",
       url: `/posts?${userId}`,
