@@ -18,9 +18,8 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BASE_URL: ${{ secrets.BASE_URL }}
-      USER_NAME: ${{ secrets.USER_NAME }}
-      PASSWORD: ${{ secrets.PASSWORD }}
+      TOKEN: ${{ secrets.TOKEN }}
+      
 
     steps:
       - name: 📥 Checkout code
@@ -59,25 +58,4 @@ jobs:
           from: ${{ secrets.EMAIL_USERNAME }}
           attachments: ./cypress/reports/index.html
 
-      - name: 💬 Comment & ❌ Auto-close PR if tests failed
-        if: failure() && github.event_name == 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          gh pr comment ${{ github.event.pull_request.number }} \
-            --body "❌ Cypress tests failed. This PR is being closed automatically."
-          gh pr close ${{ github.event.pull_request.number }}
-        continue-on-error: true
-
-      - name: ✅ Auto-merge PR if tests passed
-        if: success() && github.event_name == 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "Merging PR #${{ github.event.pull_request.number }}..."
-          curl -X PUT \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/merge \
-            -d '{"merge_method": "merge"}'
-          echo "PR #${{ github.event.pull_request.number }} merged successfully."
+     
